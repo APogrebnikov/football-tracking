@@ -1,5 +1,5 @@
 Class fbt.Game Extends %Persistent
-{
+{ 
 
 Storage Default
 {
