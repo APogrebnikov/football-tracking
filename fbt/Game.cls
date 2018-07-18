@@ -1,5 +1,6 @@
 Class fbt.Game Extends %Persistent
 {
+	Relationship passes as fbt.Pass [Cardinality = many, Inverse = match];
 	Property matchId As %String;
 	/// Time from start in sec
 	Property duration As %Integer;

@@ -1,5 +1,6 @@
 Class fbt.Pass Extends %Persistent
-{
+{	
+	Relationship match as fbt.Game [Cardinality = one, Inverse = passes];
 	/// start pass
 	Property vecStart As fbt.Point;
 	Property vecEnd As fbt.Point;
@@ -58,6 +59,9 @@ Storage Default
 </Value>
 <Value name="15">
 <Value>speed</Value>
+</Value>
+<Value name="16">
+<Value>match</Value>
 </Value>
 </Data>
 <DataLocation>^fbt.PassD</DataLocation>
