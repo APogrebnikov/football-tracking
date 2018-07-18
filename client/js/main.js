@@ -75,13 +75,18 @@ function createCircle(x,y,radius){
             div.html(Math.round(d.center.x)+" : "+Math.round(d.center.y) + "<br/> Hello")	
                 .style("left", (d3.event.pageX) + "px")		
                 .style("top", (d3.event.pageY - 28) + "px");	
-            }.bind(this,circle))					
-        .on("mouseout", function(d) {	
+    }.bind(this,circle));
+    
+    circle.on("mouseout", function(d) {	
             d.attr("fill",d.oldcolor);
             div.transition()		
                 .duration(500)		
                 .style("opacity", 0);	
-        }.bind(this,circle));
+    }.bind(this,circle));
+    
+    circle.on("click", function(d) {	
+            circle.interrupt();	
+    }.bind(this,circle));
     
     circle.append("text")
 	    .attr("dx", function(d){return -20})
@@ -96,18 +101,17 @@ function createCircle(x,y,radius){
       circle
         .attr("cx", x+tempx)
         .attr("cy", y+tempy)
-        // position the circle at 250 on the y axis
-        .transition()        // apply a transition
-        .duration(2000*Math.random())      // apply it over 2000 milliseconds
+        .transition()
+        .duration(2000*Math.random())
         .attr('cx', width*Math.random()) 
         .attr("cy", height*Math.random())
-        .attr("opacity", 0.5)// move the circle to 920 on the x axis
-        .transition()        // apply a transition
-        .duration(2000*Math.random())      // apply it over 2000 milliseconds
+        .attr("opacity", 0.5)
+        .transition()
+        .duration(2000*Math.random())
         .attr("cx", x+tempx)
         .attr("cy", y+tempy)
-        .attr("opacity", 1.0)// return the circle to 40 on the x axis
-        .on("end", repeat);  // when the transition finishes start again
+        .attr("opacity", 1.0)
+        .on("end", repeat);
     };
     
     /*
@@ -149,6 +153,16 @@ function populate(count){
     for(var i=0; i<count; i++){
         listOfCircles.push(createCircle(10,10,25));
     }
+    
+    var dragHandler = d3.drag()
+    .on("drag", function () {
+        
+        d3.select(this).interrupt()
+            .attr("cx", d3.event.x)
+            .attr("cy", d3.event.y);
+    });
+
+    dragHandler(svg.selectAll("circle"));
 }
 
 function generate(){
