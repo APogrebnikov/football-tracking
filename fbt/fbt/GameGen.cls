@@ -1,0 +1,5 @@
+Class fbt.GameGen
+{
+
+
+}

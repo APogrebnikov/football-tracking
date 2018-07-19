@@ -14,7 +14,7 @@ Class fbt.Field Extends %Persistent
 	
 	/// calc magic consts for feeld
 	Method calcFeeld() {
-		s ..degOfLat = 111319 *(  + cos(..startPoint.lat)) 
+		s ..degOfLat = 111319 * ($zcos(..startPoint.lat * $zpi / 180)) 
 		s ..degOfLon = 111134
 		s ..lt = ..startPoint
 		s ..rb = ..startPoint
