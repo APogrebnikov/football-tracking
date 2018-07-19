@@ -8,37 +8,86 @@ var listOfPoints=[
         'x':10,
         'y':20,
         'radius':5,
-        'name':'test'
+        'name':'test',
+        'speed':100
     },{
         'x':30,
         'y':50,
         'radius':5,
-        'name':'test1'
+        'name':'test1',
+        'speed':300
     },{
         'x':60,
         'y':80,
         'radius':5,
-        'name':'test2'
+        'name':'test2',
+        'speed':100
     },{
         'x':90,
         'y':100,
         'radius':5,
-        'name':'test3'
+        'name':'test3',
+        'speed':500
     },{
         'x':190,
         'y':150,
         'radius':5,
-        'name':'test4'
+        'name':'test4',
+        'speed':200
     },{
         'x':220,
         'y':300,
         'radius':5,
-        'name':'test5'
+        'name':'test5',
+        'speed':100
     },{
         'x':390,
         'y':390,
         'radius':5,
-        'name':'test6'
+        'name':'test6',
+        'speed':100
+    },{
+        'x':500,
+        'y':390,
+        'radius':5,
+        'name':'test7',
+        'speed':100
+    },{
+        'x':310,
+        'y':30,
+        'radius':5,
+        'name':'test8',
+        'speed':100
+    },{
+        'x':600,
+        'y':500,
+        'radius':5,
+        'name':'test9',
+        'speed':100
+    },{
+        'x':20,
+        'y':200,
+        'radius':5,
+        'name':'test10',
+        'speed':100
+    },{
+        'x':100,
+        'y':500,
+        'radius':5,
+        'name':'test11',
+        'speed':100
+    },{
+        'x':100,
+        'y':20,
+        'radius':5,
+        'name':'test12',
+        'speed':100
+    },{
+        'x':750,
+        'y':780,
+        'radius':5,
+        'name':'test13',
+        'speed':100
     }
 ];
 
@@ -105,11 +154,13 @@ function createCircle(x,y,radius){
         .duration(2000*Math.random())
         .attr('cx', width*Math.random()) 
         .attr("cy", height*Math.random())
+        .attr("fill",getRandomColor())
         .attr("opacity", 0.5)
         .transition()
         .duration(2000*Math.random())
         .attr("cx", x+tempx)
         .attr("cy", y+tempy)
+        .attr("fill",getRandomColor())
         .attr("opacity", 1.0)
         .on("end", repeat);
     };
@@ -173,6 +224,44 @@ function generate(){
     generateLine();
 }
 
+function moveByPoint(){
+    
+    var path = svg.select("path"),
+    startPoint = pathStartPoint(path);
+    
+    var circle=svg.append("circle") 
+        .attr("r", 15)
+        .attr("fill",getRandomColor())
+        .attr("transform", "translate(" + startPoint + ")");
+    
+    transition(circle,path);
+}
+
+//==================ДвижSTART
+function pathStartPoint(path) {
+    var d = path.attr("d"),
+    dsplitted = d.split(" ");
+    return dsplitted[0].split(",");
+}
+
+function transition(circle,path) {
+    circle.transition()
+        .duration(7500)
+        .attrTween("transform", translateAlong(path.node()))
+        .each("end", transition);
+}
+
+function translateAlong(path) {
+    var l = path.getTotalLength();
+    return function(i) {
+      return function(t) {
+        var p = path.getPointAtLength(t * l);
+        return "translate(" + p.x + "," + p.y + ")";
+      }
+    }
+}
+//==================ДвижEND
+
 function generateLine(){
     var line = d3.line()
             .x(function(d){return d.x;})
@@ -180,7 +269,7 @@ function generateLine(){
     
     svg.append("path").attr("d", line(listOfPoints))
         .attr("stroke", "blue")
-        .attr("stroke-width", 1)
+        .attr("stroke-width", 0)
         .attr("fill", "none");
 }
                   
