@@ -1,13 +1,13 @@
 Class fbt.Game Extends %Persistent
 {
 	Relationship passes as fbt.Pass [Cardinality = many, Inverse = match];
-	Property matchId As %String;
+	Property matchId As %String [Required ];
 	/// Time from start in sec
-	Property duration As %Integer;
-	Property startTime As %Time;
+	Property duration As %Integer [Required ];
+	Property startTime As %Time [Required ];
 	/// Teams playing
-	Property guestTeam As fbt.Team;
-	Property hostTeam As fbt.Team;
+	Property guestTeam As fbt.Team [Required ];
+	Property hostTeam As fbt.Team [Required ];
 Storage Default
 {
 <Data name="GameDefaultData">

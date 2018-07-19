@@ -1,7 +1,7 @@
 Class fbt.Point Extends %Persistent
 {
-Property lat As %Decimal(SCALE = 8);
-Property lon As %Decimal(SCALE = 8);
+Property lat As %Decimal(SCALE = 8) [Required ];
+Property lon As %Decimal(SCALE = 8) [Required ];
 
 
 

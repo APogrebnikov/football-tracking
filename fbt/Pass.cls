@@ -2,15 +2,15 @@ Class fbt.Pass Extends %Persistent
 {	
 	Relationship match as fbt.Game [Cardinality = one, Inverse = passes];
 	/// start pass
-	Property vecStart As fbt.Point;
-	Property vecEnd As fbt.Point;
+	Property vecStart As fbt.Point [Required ];
+	Property vecEnd As fbt.Point [Required ];
 	/// happend between players
-	Property fromPlayer As fbt.Player;
+	Property fromPlayer As fbt.Player [Required ];
 	Property toPlayer As fbt.Player;
 	/// Timing
-	Property startTime As %Time;
-	Property duration As %Integer;
-	Property speed As %Decimal;
+	Property startTime As %Time [Required ];
+	Property duration As %Integer [Required ];
+	Property speed As %Decimal [Required ];
 	
 Storage Default
 {
