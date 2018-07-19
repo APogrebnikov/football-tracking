@@ -2,6 +2,8 @@ var svg;
 var div;
 var width = 2000;
 var height = 2000;
+var widthField;
+var heightField;
 var listOfCircles=[];
 var listOfPoints=[
     {
@@ -83,8 +85,8 @@ var listOfPoints=[
         'name':'test12',
         'speed':100
     },{
-        'x':750,
-        'y':780,
+        'x':600,
+        'y':300,
         'radius':5,
         'name':'test13',
         'speed':100
@@ -237,6 +239,19 @@ function moveByPoint(){
     transition(circle,path);
 }
 
+function moveByRandomPoint(){
+    
+    var path = generateRandomPath();
+    startPoint = pathStartPoint(path);
+    
+    var circle=svg.append("circle") 
+        .attr("r", 15)
+        .attr("fill",getRandomColor())
+        .attr("transform", "translate(" + startPoint + ")");
+    
+    transition(circle,path);
+}
+
 //==================ДвижSTART
 function pathStartPoint(path) {
     var d = path.attr("d"),
@@ -272,7 +287,141 @@ function generateLine(){
         .attr("stroke-width", 0)
         .attr("fill", "none");
 }
-                  
+//==================Генерация поля START
+function generateField(width,height){
+    widthField = width;
+    heightField = height;
+    //Отспуты
+    var mar=20;
+    
+    var field = svg.append("rect")
+        .style("fill", "green")
+        .style("stroke", "white")
+        .style("stroke-width", "2")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width) 
+        .attr("height", height)
+        .attr("rx", 5);
+    
+    var fieldInner = svg.append("rect")
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("stroke-width", "2")
+        .attr("x", mar)
+        .attr("y", mar)
+        .attr("width", width-mar*2) 
+        .attr("height", height-mar*2)
+        .attr("rx", 5);
+    
+    var gateAreaLeft = svg.append("rect")
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("stroke-width", "2")
+        .attr("x", mar)
+        .attr("y", (height/2)-200)
+        .attr("width", 160) 
+        .attr("height", 400);
+    
+    var gateLeft = svg.append("rect")
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("stroke-width", "2")
+        .attr("x", mar)
+        .attr("y", (height/2)-90)
+        .attr("width", 55) 
+        .attr("height", 180);
+    
+    var circleLeft = svg.append("circle")     
+        .style("fill", "white")
+        .style("stroke", "white")
+        .style("stroke-width", "1")
+        .attr("cx", mar+110)
+        .attr("cy", height/2)
+        .attr("r", 5);
+    
+    var gateAreaRight = svg.append("rect")
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("stroke-width", "2")
+        .attr("x", width-(160+mar))
+        .attr("y", (height/2)-200)
+        .attr("width", 160) 
+        .attr("height", 400);
+    
+    var gateRight = svg.append("rect")
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("stroke-width", "2")
+        .attr("x", width-(55+mar))
+        .attr("y", (height/2)-90)
+        .attr("width", 55) 
+        .attr("height", 180);
+    
+    var circleRight = svg.append("circle")     
+        .style("fill", "white")
+        .style("stroke", "white")
+        .style("stroke-width", "1")
+        .attr("cx", width-(mar+110))
+        .attr("cy", height/2)
+        .attr("r", 5);
+
+    var center = svg.append("line")
+        .style("stroke", "white")
+        .style("stroke-width", "4")
+        .attr("x1", width/2)
+        .attr("y1", mar)
+        .attr("x2", width/2)
+        .attr("y2", height-mar)
+        .attr("rx", 5);
+    
+    var circle = svg.append("circle")     
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("stroke-width", "4")
+        .attr("cx", width/2)
+        .attr("cy", height/2)
+        .attr("r", 90);
+    
+    var circlecenter = svg.append("circle")     
+        .style("fill", "white")
+        .style("stroke", "white")
+        .style("stroke-width", "4")
+        .attr("cx", width/2)
+        .attr("cy", height/2)
+        .attr("r", 10);
+}
+//==================Генерация поля END
+      
+//Генерируем рандомную траекторию в рамках поля
+function generateRandomPath(){
+    var line = d3.line()
+            .x(function(d){return d.x;})
+            .y(function(d){return d.y;}); 
+    
+    var newRandomPointList=generateRandomPoints();
+    
+    var pathNew=svg.append("path").attr("d", line(newRandomPointList))
+        .attr("stroke", "blue")
+        .attr("stroke-width", 0)
+        .attr("fill", "none");
+    
+    return pathNew;
+}
+
+function generateRandomPoints(){
+    var count=100*Math.random();
+    var result=[];
+    for(var i=0;i<count;i++)
+    {
+        var x=(widthField-40)*Math.random();
+        var y=(heightField-40)*Math.random();
+        var point={'x':x,'y':y};
+        result.push(point);
+    }
+    return result;
+}
+
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
