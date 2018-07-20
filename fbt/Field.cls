@@ -12,6 +12,17 @@ Class fbt.Field Extends %Persistent
 	Property degOfLat As %Decimal;
 	Property degOfLon As %Decimal;
 	
+	/// Convert m to deg
+	Method convMtoDeg(distX As %Decimal, distY As %Decimal) As fbt.Point  
+	{
+		s cLatToM = 111319 * ($zcos(..startPoint.lat * $zpi / 180)) 
+		s cLonToM = 111134
+		s answ = ##class(fbt.Point).%New()
+		s answ.lat = distX * (1 / cLatToM)
+		s answ.lon = distY * (1 / cLonToM)
+		return answ
+	}
+	
 	/// calc magic consts for feeld
 	Method calcFeeld() {
 		s ..degOfLat = 111319 * ($zcos(..startPoint.lat * $zpi / 180)) 
@@ -19,10 +30,10 @@ Class fbt.Field Extends %Persistent
 		s ..lt = ..startPoint
 		s ..rb = ..startPoint
 		s ..rt = ..startPoint
-		s ..lt.lat = ..len * (1/ ..degOfLat) + ..lt.lat
-		s ..rt.lat = ..len * (1/ ..degOfLat) + ..rt.lat
-		s ..rt.lon = ..widths * (1/ ..degOfLon) + ..rt.lon
-		s ..rb.lon = ..widths * (1/ ..degOfLon) + ..rb.lon
+		s ..lt.lat = ..len * (1 / ..degOfLat) + ..lt.lat
+		s ..rt.lat = ..len * (1 / ..degOfLat) + ..rt.lat
+		s ..rt.lon = ..widths * (1 / ..degOfLon) + ..rt.lon
+		s ..rb.lon = ..widths * (1 / ..degOfLon) + ..rb.lon
 	}
 Storage Default
 {
