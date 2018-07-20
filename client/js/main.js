@@ -1,9 +1,11 @@
 var svg;
 var div;
+
 var width = 2000;
 var height = 2000;
 var widthField;
 var heightField;
+
 var listOfCircles=[];
 var listOfPoints=[
     {
@@ -246,7 +248,7 @@ function moveByRandomPoint(){
     
     var circle=svg.append("circle") 
         .attr("r", 15)
-        .attr("fill",getRandomColor())
+        .attr("fill", getRandomColor())
         .attr("transform", "translate(" + startPoint + ")");
     
     transition(circle,path);
@@ -256,14 +258,16 @@ function moveByRandomPoint(){
 function pathStartPoint(path) {
     var d = path.attr("d"),
     dsplitted = d.split(" ");
-    return dsplitted[0].split(",");
+    return dsplitted[0].split(",")[0].replace('M','');
 }
 
 function transition(circle,path) {
-    circle.transition()
-        .duration(7500)
-        .attrTween("transform", translateAlong(path.node()))
-        .each("end", transition);
+    if (circle){
+        circle.transition()
+            .duration(10000)
+            .attrTween("transform", translateAlong(path.node()))
+            .on("end", transition);
+    }
 }
 
 function translateAlong(path) {
@@ -410,7 +414,7 @@ function generateRandomPath(){
 }
 
 function generateRandomPoints(){
-    var count=100*Math.random();
+    var count=50*Math.random();
     var result=[];
     for(var i=0;i<count;i++)
     {
