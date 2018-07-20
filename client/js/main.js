@@ -1,5 +1,6 @@
 var svg;
 var div;
+var defs;
 
 var width = 2000;
 var height = 2000;
@@ -105,6 +106,36 @@ function init(){
     div = d3.select("body").append("div")	
         .attr("class", "tooltip")				
         .style("opacity", 0);
+    
+    defs = svg.append('svg:defs');
+    
+    // Патерн для поля
+    defs
+	.append('svg:pattern')
+	.attr('id', 'gras-patt')
+	.attr('patternUnits', 'userSpaceOnUse')
+	.attr('width', '100')
+	.attr('height', '100')
+	.append('svg:image')
+	.attr('xlink:href', 'https://thumbs.dreamstime.com/b/seamless-synthetic-grass-repeatable-texture-background-some-highlights-40411194.jpg')
+	.attr('x', 0)
+	.attr('y', 0)
+	.attr('width', 100)
+	.attr('height', 100);
+    
+    // Патерн для мяча
+    defs.append("svg:pattern")
+    .attr("id", "ball-pattern")
+    .attr("width", 30) 
+    .attr("height", 30)
+    .attr("patternUnits", "objectBoundingBox")
+    .append("svg:image")
+    .attr("xlink:href", 'http://pngimg.com/uploads/football/football_PNG52734.png')
+    .attr("width", 30)
+    .attr("height", 30)
+    .attr("x", 0)
+    .attr("y", 0);
+
 }
 
 function createCircle(x,y,radius){
@@ -248,7 +279,8 @@ function moveByRandomPoint(){
     
     var circle=svg.append("circle") 
         .attr("r", 15)
-        .attr("fill", getRandomColor())
+        .attr("id", "ball")
+        //.attr("fill", getRandomColor())
         .attr("transform", "translate(" + startPoint + ")");
     
     transition(circle,path);
@@ -275,7 +307,7 @@ function translateAlong(path) {
     return function(i) {
       return function(t) {
         var p = path.getPointAtLength(t * l);
-        return "translate(" + p.x + "," + p.y + ")";
+        return "translate(" + p.x + "," + p.y + ") rotate("+((Math.random() - 0.5) * 2 * 180)+")";
       }
     }
 }
@@ -291,6 +323,7 @@ function generateLine(){
         .attr("stroke-width", 0)
         .attr("fill", "none");
 }
+
 //==================Генерация поля START
 function generateField(width,height){
     widthField = width;
@@ -299,7 +332,7 @@ function generateField(width,height){
     var mar=20;
     
     var field = svg.append("rect")
-        .style("fill", "green")
+        .attr('id', 'field-main')
         .style("stroke", "white")
         .style("stroke-width", "2")
         .attr("x", 0)

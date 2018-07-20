@@ -14,3 +14,14 @@ div.tooltip {
 .top {
     z-index: 1000;
 }
+
+#field-main
+{
+	fill: url(#gras-patt) #cccccc;
+}
+
+
+#ball
+{
+	fill: url(#ball-pattern) #cccccc;
+}
