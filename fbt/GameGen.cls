@@ -4,10 +4,13 @@ Class fbt.GameGen Extends %Persistent
 	
 	/// The method generates the game
 	Method stepGen(rad As %Decimal = 50, pass As fbt.Pass) {
+		#dim curPass As fbt.Pass
 		s curPass = ##class(fbt.Pass).%New()
+		s curPass.startTime = pass.startTime + pass.duration
 		//get start point
 		//get player from
 		if (pass.inField){
+			s start = pass.vecEnd
 			s curPass.vecStart = pass.vecEnd  
 			s curPass.fromPlayer = pass.toPlayer
 		} else {
@@ -17,80 +20,237 @@ Class fbt.GameGen Extends %Persistent
 		}
 		//get end point [rand]
 			s end = vecGen(rad, ..field, pass)
+			s curPass.vecEnd = end
 			//check interseption
 			if ((end.lat < 0 || end.lat >= field.len) && (end.lon < 0 || end.lon >= ..field.widths)){
 				s pass.inField = 0
 				if end.lon < 0{
 					if end.lat < 0 {
+						//1
 						s p1 = ..interCheck(start,end,..field.l0,..field.r0)
 						if p1.lat > -1 {
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 1
 						
 						}
 						s p1 = ..interCheck(start,end,..field.l1,..field.l2)
 						if p1.lat > -1 {
 							s pass.Scored = 1
-						
+							
 						}
 						s p1 = ..interCheck(start,end,..field.l0,..field.l1)
 						if p1.lat > -1 {
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 4
 						
 						}
 						s p1 = ..interCheck(start,end,..field.l2,..field.l3)
 						if p1.lat > -1 {
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 4
 						
 						}
 					} else {
+						//2
 						s p1 = ..interCheck(start,end,..field.l3,..field.r3)
 						if p1.lat > -1 {
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 3
 						
 						}
 						s p1 = ..interCheck(start,end,..field.l1,..field.l2)
 						if p1.lat > -1 {
-						
+							s pass.Scored = 1
 						}
 						s p1 = ..interCheck(start,end,..field.l0,..field.l1)
 						if p1.lat > -1 {
-						
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 4
 						}
 						s p1 = ..interCheck(start,end,..field.l2,..field.l3)
 						if p1.lat > -1 {
-						
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 4
 						}
 					}
 				} else {
 					if end.lat < 0 {
+						//3
 						s p1 = ..interCheck(start,end,..field.l0,..field.r0)
 						if p1.lat > -1 {
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 1
 						
 						}
-						s p1 = ..interCheck(start,end,..field.l1,..field.l2)
+						s p1 = ..interCheck(start,end,..field.r1,..field.r2)
 						if p1.lat > -1 {
+							s pass.Scored = 1
+						}
+						s p1 = ..interCheck(start,end,..field.r0,..field.r1)
+						if p1.lat > -1 {
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 2
 						
 						}
-						s p1 = ..interCheck(start,end,..field.l0,..field.l1)
+						s p1 = ..interCheck(start,end,..field.r2,..field.r3)
 						if p1.lat > -1 {
-						
-						}
-						s p1 = ..interCheck(start,end,..field.l2,..field.l3)
-						if p1.lat > -1 {
-						
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 2
 						}
 					} else {
+						//4
 						s p1 = ..interCheck(start,end,..field.l3,..field.r3)
 						if p1.lat > -1 {
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 3
 						
 						}
-						s p1 = ..interCheck(start,end,..field.l1,..field.l2)
+						s p1 = ..interCheck(start,end,..field.r1,..field.r2)
 						if p1.lat > -1 {
-						
+							s pass.Scored = 1
 						}
-						s p1 = ..interCheck(start,end,..field.l0,..field.l1)
+						s p1 = ..interCheck(start,end,..field.r0,..field.r1)
 						if p1.lat > -1 {
-						
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 2
 						}
-						s p1 = ..interCheck(start,end,..field.l2,..field.l3)
+						s p1 = ..interCheck(start,end,..field.r2,..field.r3)
 						if p1.lat > -1 {
-						
+							//gen pl to
+							d curPass.genSpeedTime()
+							d curPass.%Save()
+							#dim imagePass As fbt.Pass
+							s imagePass = ##class(fbt.Pass).%New()
+							s imagePass.vecStart = curPass.vecEnd
+							s shftPnt = ##class(fbt.Point).Construct(.0,0.1)
+							s imagePass.vecEnd = ##class(fbt.Point).vecSum(shftPnt,p1)
+							s imagePass.fromPlayer = curPass.toPlayer
+							s imagePass.toPlayer = curPass.toPlayer
+							s imagePass.startTime = curPass.startTime + curPass.duration
+							s imagePass.duration = $R(4) + 2
+							s imagePass.sector = 2
+							
 						}
 					}
 				}
@@ -118,11 +278,11 @@ Class fbt.GameGen Extends %Persistent
 			s a = $R(2 * rad) - rad
 			s b = $R(2 * rad) - rad
 		}
-		s len = vecLen(a,b)
+		/*s len = vecLen(a,b)
 		s vec = ##class(fbt.Point).%New()
 		s vec.lat = a
 		s vec.lon = b
-		s ans = ##class(fbt.Point).vecSum(pass.vecStart, vec)
+		s ans = ##class(fbt.Point).vecSum(pass.vecStart, vec)*/
 		//s ans = ##class(fbt.Point).vecSum(pass.vecStart,field.convMtoDeg(a,b))
 		
 		return ans
