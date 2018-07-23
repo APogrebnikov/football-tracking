@@ -13,6 +13,18 @@ Class fbt.Pass Extends %Persistent
 	Property speed As %Decimal [Required ];
 	Property Scored As %Boolean;
 	Property inField As %Boolean;
+	Property sector As %Integer;//0 = Any, 1 = 1q & 2q, 2 = 2q & 3q 3 = 3q & 4q 4 = 4q & 1q
+	
+	/// speed, time generation
+	Method genSpeedTime() 
+	{
+		s vec = ##class(fbt.Point).vecDif(..vecEnd,..vecStart)
+		s vecLen = ##class(fbt.GameGen).vecLen(vec.lat,vec.lon)
+		s speed = $R(40)
+		s ..speed = speed
+		// calc time
+		s ..duration = vecLen / speed + 1
+	}
 	
 Storage Default
 {
@@ -70,6 +82,9 @@ Storage Default
 </Value>
 <Value name="18">
 <Value>inField</Value>
+</Value>
+<Value name="19">
+<Value>sector</Value>
 </Value>
 </Data>
 <DataLocation>^fbt.PassD</DataLocation>

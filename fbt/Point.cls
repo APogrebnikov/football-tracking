@@ -3,6 +3,7 @@ Class fbt.Point Extends %SerialObject
 Property lat As %Decimal(SCALE = 8) [Required ];
 Property lon As %Decimal(SCALE = 8) [Required ];
 
+
  /// constructor
  ClassMethod Construct(x As %Decimal, y As %Decimal) As fbt.Point 
  {
@@ -16,6 +17,13 @@ Property lon As %Decimal(SCALE = 8) [Required ];
  	s ret = a
  	s ret.lat = a.lat + b.lat
  	s ret.lon = a.lon + b.lon
+ 	return ret
+ }
+ 
+ ClassMethod vecDif(a As fbt.Point, b As fbt.Point) As fbt.Point{
+ 	s ret = ##class(fbt.Point).%New()
+ 	s ret.lat = a.lat - b.lat
+ 	s ret.lon = a.lon - b.lon
  	return ret
  }
 
