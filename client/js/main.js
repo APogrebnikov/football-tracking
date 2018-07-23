@@ -6,6 +6,7 @@ var width = 2000;
 var height = 2000;
 var widthField;
 var heightField;
+var currentGameId=0;
 
 var restServer='http://localhost:57773/rest/football/';
 
@@ -501,21 +502,22 @@ function getRandomColor() {
   return color;
 }
 
-//REST API
+//===REST API
+//Получение списка всех игр
 function loadAllGames(){
     var xhr = new XMLHttpRequest();
     xhr.open('GET', restServer+'get/games', false);
     xhr.send();
 
     if (xhr.status != 200) {
-      alert( xhr.status + ': ' + xhr.statusText );
+        console.error( xhr.status + ': ' + xhr.statusText );
     } else {
         console.log(xhr.responseText);
-        pushTable(JSON.parse(xhr.responseText));
+        pushGamesTable(JSON.parse(xhr.responseText));
     }
 }
 
-function pushTable(list){
+function pushGamesTable(list){
     var table=$('#tbGames');
     for(var i=0;i<list.length;i++)
     {
@@ -524,9 +526,45 @@ function pushTable(list){
         var tdTeam1=$('<td>'+list[i].hostTeam+'</td>');
         var tdTeam2=$('<td>'+list[i].guestTeam+'</td>');
         
+        tr.on('click',function(game){
+            getPassesForGame(game.id);
+        }.bind(this,list[i]));
+        
         tr.append(tdId);
         tr.append(tdTeam1);
         tr.append(tdTeam2);
         table.append(tr);
+    }
+}
+
+//Получение списка всех пассов в игре
+function getPassesForGame(gameId){
+    currentGameId=gameId;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', restServer+'get/points/'+gameId, false);
+    xhr.send();
+
+    if (xhr.status != 200) {
+        console.error( xhr.status + ': ' + xhr.statusText );
+    } else {
+        console.log(xhr.responseText);
+    }
+}
+
+//Получение списка всех пассов пересекающих круг
+function getPassesCheck(){
+    var x = $('#tbX').val();
+    var y = $('#tbY').val();
+    var r = $('#tbR').val();
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", restServer+'check/round/'+currentGameId, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({cx:x, cy:y,r:r}));
+
+    if (xhr.status != 200) {
+        console.error( xhr.status + ': ' + xhr.statusText );
+    } else {
+        console.log(xhr.responseText);
     }
 }

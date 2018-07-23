@@ -31,3 +31,7 @@ div.tooltip {
     font-size: 10px;
     max-width: 265px;
 }
+
+#tbGames tr{
+    cursor: pointer;
+}

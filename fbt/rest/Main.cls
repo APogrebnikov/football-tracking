@@ -8,7 +8,7 @@ XData UrlMap
 	<Route Url="/check/round/:idgame" Method="POST" Call="checkRound" />
 	
 	<Route Url="/get/games" Method="GET" Call="getAllGames" />
-	<Route Url="/get/points/:idgame" Method="GET" Call="getAllPoints" />
+	<Route Url="/get/points/:idgame" Method="GET" Call="getAllPasses" />
 	
 	<Route Url="/test" Method="GET" Call="test" />
 </Routes>
@@ -43,10 +43,10 @@ ClassMethod getAllGames(){
 }
 
 /// Получение всех векторов для игры
-ClassMethod getAllPoints(idgame As %String){
+ClassMethod getAllPasses(idgame As %String){
 	set st=$$$OK
 	try{
-		set sql = "SELECT * FROM fbt.Pass WHERE match="_idgame	
+		set sql = "SELECT * FROM fbt.Pass WHERE ""match""="_idgame	
    	 	set rs = ##class(%ResultSet).%New("%DynamicQuery:SQL")
    		$$$ThrowOnError(rs.Prepare(sql))
 	    $$$ThrowOnError(rs.Execute())
