@@ -15,6 +15,19 @@
     $(document).ready(function() {
         init();
         generateField(1200,900);
+        
+        $('input').on('propertychange input', function (e) {
+            var valueChanged = false;
+
+            if (e.type=='propertychange') {
+                valueChanged = e.originalEvent.propertyName=='value';
+            } else {
+                valueChanged = true;
+            }
+            if (valueChanged) {
+                createCircleForCheck();
+            }
+        });
     });
 </script>
 
@@ -40,21 +53,21 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addonX">X</span>
                     </div>
-                    <input id="tbX" type="text" class="form-control" placeholder="0" aria-label="X" aria-describedby="basic-addonX" value="600">
+                    <input id="tbX" type="number" class="form-control" placeholder="0" aria-label="X" aria-describedby="basic-addonX" value="600">
                 </div>
                 
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addonY">Y</span>
                     </div>
-                    <input id="tbY" type="text" class="form-control" placeholder="0" aria-label="Y" aria-describedby="basic-addonY" value="450">
+                    <input id="tbY" type="number" class="form-control" placeholder="0" aria-label="Y" aria-describedby="basic-addonY" value="450">
                 </div>
                 
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addonR">Радиус</span>
                     </div>
-                    <input id="tbR" type="text" class="form-control" placeholder="0" aria-label="R" aria-describedby="basic-addonR" value="20">
+                    <input id="tbR" type="number" class="form-control" placeholder="0" aria-label="R" aria-describedby="basic-addonR" value="20">
                 </div>
                 
                 <button type="button" class="btn btn-success" onclick="createCircleForCheck()">Создать круг</button>

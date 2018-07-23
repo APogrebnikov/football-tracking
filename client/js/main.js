@@ -475,6 +475,19 @@ function createCircleForCheck(){
         .attr('fill','red');
 }
 
+$('input').on('propertychange input', function (e) {
+    var valueChanged = false;
+
+    if (e.type=='propertychange') {
+        valueChanged = e.originalEvent.propertyName=='value';
+    } else {
+        valueChanged = true;
+    }
+    if (valueChanged) {
+        createCircleForCheck();
+    }
+});
+
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
