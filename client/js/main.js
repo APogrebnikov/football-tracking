@@ -548,6 +548,22 @@ function getPassesForGame(gameId){
         console.error( xhr.status + ': ' + xhr.statusText );
     } else {
         console.log(xhr.responseText);
+        var allPasses=JSON.parse(xhr.responseText);
+        var points=[];
+        for(var i=0;i<allPasses.length;i++)
+        {
+            var point1={};
+            point1.x=allPasses[i].startX;
+            point1.y=allPasses[i].startY;
+            point1.player=allPasses[i].fromPlayer;
+            points.push(point1);
+            
+            var point2={};
+            point2.x=allPasses[i].endX;
+            point2.y=allPasses[i].endY;
+            point2.player=allPasses[i].toPlayer;
+            points.push(point2);
+        }
     }
 }
 
@@ -566,5 +582,21 @@ function getPassesCheck(){
         console.error( xhr.status + ': ' + xhr.statusText );
     } else {
         console.log(xhr.responseText);
+        var allPasses=JSON.parse(xhr.responseText);
+        var points=[];
+        for(var i=0;i<allPasses.length;i++)
+        {
+            var point1={};
+            point1.x=allPasses[i].startX;
+            point1.y=allPasses[i].startY;
+            point1.player=allPasses[i].fromPlayer;
+            points.push(point1);
+            
+            var point2={};
+            point2.x=allPasses[i].endX;
+            point2.y=allPasses[i].endY;
+            point2.player=allPasses[i].toPlayer;
+            points.push(point2);
+        }
     }
 }
