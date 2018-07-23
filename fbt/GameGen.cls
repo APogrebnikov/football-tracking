@@ -1,6 +1,7 @@
 Class fbt.GameGen Extends %Persistent
 {
 	Property field As fbt.Field;
+	
 	/// The method generates the game
 	Method stepGen(rad As %Decimal = 50, pass As fbt.Pass) {
 		s curPass = ##class(fbt.Pass).%New()
@@ -17,7 +18,7 @@ Class fbt.GameGen Extends %Persistent
 		//get end point [rand]
 			s end = vecGen(rad, ..field, pass)
 			//check interseption
-			if ((end.lat < 0 || end.lat >= field.len)&&(end.lon < 0 || end.lon >= ..field.widths)){
+			if ((end.lat < 0 || end.lat >= field.len) && (end.lon < 0 || end.lon >= ..field.widths)){
 				s pass.inField = 0
 				if end.lon < 0{
 					if end.lat < 0 {
@@ -143,7 +144,8 @@ Class fbt.GameGen Extends %Persistent
 		s retVal = ##class(fbt.Point).%New()
 		s retVal.lon = -1 
 		s retVal.lat = -1
-		if (m1 >= 0 && m2 >= 0 && m1<= 1 && m2 <=1){
+		if (m1 >= 0 && m2 >= 0 && m1<= 1 && m2 <=1)
+		{
 			s retVal.lon = p1.lon + p2.lon * m2
 			s retVal.lat = p1.lat + p2.lat * m2
 		}

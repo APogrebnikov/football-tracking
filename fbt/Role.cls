@@ -2,6 +2,7 @@
 Class fbt.Role Extends %Persistent
 {
 	Property roleName as %String;
+	
 	Index IRoleName on roleName [unique];
 	
 Storage Default

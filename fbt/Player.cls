@@ -1,21 +1,25 @@
 Class fbt.Player Extends (%Persistent, %Populate)
 {
-Relationship Team as fbt.Team [Cardinality = one, Inverse = Players];
-Property name As %String(MAXLEN = "");
-Property role As fbt.Role (POPSPEC = "..PopRole()");
 
-//..
- ClassMethod Compare(number as %Integer, min as %Integer, max as %Integer) As %Boolean  
- {
+Relationship Team As fbt.Team [ Cardinality = one, Inverse = Players ];
+
+Property name As %String(MAXLEN = "");
+
+Property role As fbt.Role(POPSPEC = ".PopRole()");
+
+// ..
+
+ClassMethod Compare(number As %Integer, min As %Integer, max As %Integer) As %Boolean
+{
  	q:((number >= min) && (number <= max)) 1
  	q:0
- }
- 
- ClassMethod PopRole() as fbt.Role
- {
+}
+
+ClassMethod PopRole() As fbt.Role
+{
   	s rand = $R(1100)
   	q role = $CASE(1,..Compare(rand,0,99):##class(fbt.Role).%IRoleNameOpen("Goalkeeper"),..Compare(rand,100,599):##class(fbt.Role).%IRoleNameOpen("Defender"),..Compare(rand,600,799):##class(fbt.Role).%IRoleNameOpen("Midfielder"),:##class(fbt.Role).%IRoleNameOpen("Forward"))
- }
+}
 
 Storage Default
 {

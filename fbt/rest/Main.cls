@@ -11,14 +11,35 @@ XData UrlMap
 	<Route Url="/get/points/:idgame" Method="GET" Call="getAllPoints" />
 	
 	<Route Url="/test" Method="GET" Call="test" />
-	
 </Routes>
 }
 
 /// Получения списка всех игр
 ClassMethod getAllGames(){
 	set st=$$$OK
-	q st
+	try{
+		set sql = "SELECT * FROM fbt.Game"	
+   	 	set rs = ##class(%ResultSet).%New("%DynamicQuery:SQL")
+   		$$$ThrowOnError(rs.Prepare(sql))
+	    $$$ThrowOnError(rs.Execute())
+	    #dim out As %DynamicArray = []
+	    while (rs.%Next() '= 0) {
+			#dim game As fbt.Game = rs.GetObject()
+			set r =  {
+			    "id": (game.%Id()),
+			    "hostTeam":(game.hostTeam.name),
+			    "guestTeam":(game.guestTeam.name),
+			    "matchId":(game.matchId)
+			}
+	 		do out.%Push(r)
+	    }
+		
+	    w out.%ToJSON()
+	    
+	}catch c{
+		set st = c.AsStatus()
+	}
+    return st
 }
 
 /// Получение всех векторов для игры
@@ -38,6 +59,12 @@ ClassMethod checkRound(idgame As %String){
     set r=obj.r
     
     q $$$OK
+}
+
+ClassMethod Test(){
+	set st=$$$OK
+	w {"test":"OK"}.%ToJSON()
+	q st
 }
 
 }
