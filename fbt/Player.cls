@@ -1,5 +1,6 @@
 Class fbt.Player Extends %Persistent
 {
+
 Property name As %String(MAXLEN = "");
 
 Storage Default

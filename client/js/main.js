@@ -471,22 +471,24 @@ function createCircleForCheck(){
         .attr('cx', x)
         .attr('cy', y)
         .attr('r', r)
-        .style('opacity', .2) 
+        .attr('stroke', 'white')
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '5,5')
+        .attr('fill-opacity',.2)
         .attr('fill','red');
+        //.style('opacity', .2) 
+    
+    var dragHandler = d3.drag().on("drag", function () {
+        d3.select(this).interrupt()
+            .attr("cx", d3.event.x)
+            .attr("cy", d3.event.y);
+        $('#tbX').val(d3.event.x);
+        $('#tbY').val(d3.event.y)
+    });
+
+    dragHandler(svg.selectAll("#selCircle"));
 }
 
-$('input').on('propertychange input', function (e) {
-    var valueChanged = false;
-
-    if (e.type=='propertychange') {
-        valueChanged = e.originalEvent.propertyName=='value';
-    } else {
-        valueChanged = true;
-    }
-    if (valueChanged) {
-        createCircleForCheck();
-    }
-});
 
 function getRandomColor() {
   var letters = '0123456789ABCDEF';

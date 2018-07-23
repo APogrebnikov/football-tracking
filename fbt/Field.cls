@@ -1,7 +1,7 @@
 Class fbt.Field Extends %Persistent
 {
 
-/// Zero point(lb)
+	/// Zero point(lb)
 	Property startPoint As fbt.Point [Required ];
 	Property lt As fbt.Point;
 	Property rb As fbt.Point;
