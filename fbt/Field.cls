@@ -1,7 +1,7 @@
 Class fbt.Field Extends %Persistent
 {
 
-/// Zero point(lb)
+	/// Zero point(lb)
 	Property startPoint As fbt.Point [Required ];
 	Property lt As fbt.Point;
 	Property rb As fbt.Point;
@@ -13,6 +13,24 @@ Class fbt.Field Extends %Persistent
 	Property degOfLon As %Decimal;
 	Property segLenX As %Decimal;
 	Property segLenY As %Decimal;
+	// vector op vectors of lines
+	Property l0 As fbt.Point;
+	Property l1 As fbt.Point;
+	Property l2 As fbt.Point;
+	Property l3 As fbt.Point;
+	Property r0 As fbt.Point;
+	Property r1 As fbt.Point;
+	Property r2 As fbt.Point;
+	Property r3 As fbt.Point;
+	
+	Property l5 As fbt.Point;
+	Property l4 As fbt.Point;
+	Property lgt As fbt.Point;
+	Property lgb As fbt.Point;
+	Property r4 As fbt.Point;
+	Property r5 As fbt.Point;
+	Property rgb As fbt.Point;
+	Property rgt As fbt.Point;
 	
 	/// Convert m to deg
 	Method convMtoDeg(distX As %Decimal, distY As %Decimal) As fbt.Point  
@@ -40,6 +58,27 @@ Class fbt.Field Extends %Persistent
 		s field.rb = ##class(fbt.Point).Construct(field.widths,0)
 		s field.rt = ##class(fbt.Point).Construct(field.widths,field.len)
 		s field.center = ##class(fbt.Point).Construct(field.widths / 2,field.len / 2)
+		
+		
+		s field.l0 = ##class(fbt.Point).Construct(0,0)
+		s field.l1 = ##class(fbt.Point).Construct(0,field.center - 2.6)
+		s field.l2 = ##class(fbt.Point).Construct(0,field.center + 2.6)
+		s field.l3 = ##class(fbt.Point).Construct(0,field.len)
+		s field.r0 = ##class(fbt.Point).Construct(field.widths,0)
+		s field.r1 = ##class(fbt.Point).Construct(field.widths,field.center - 2.6)
+		s field.r2 = ##class(fbt.Point).Construct(field.widths,field.center + 2.6)
+		s field.r3 = ##class(fbt.Point).Construct(field.widths,field.len)
+		//Goal keeper zone
+		s field.l4 = ##class(fbt.Point).Construct(0,field.l1 - 5.5)
+		s field.l5 = ##class(fbt.Point).Construct(0,field.l2 + 5.5)
+		s field.lgb = ##class(fbt.Point).Construct(5.5,field.l1 - 5.5)
+		s field.lgt = ##class(fbt.Point).Construct(5.5,field.l2 + 5.5)
+		s field.r4 = ##class(fbt.Point).Construct(field.widths,field.r1 - 5.5)
+		s field.r5 = ##class(fbt.Point).Construct(field.widths,field.r2 + 5.5)
+		s field.rgb = ##class(fbt.Point).Construct(field.widths - 5.5,field.r1 - 5.5)
+		s field.rgt = ##class(fbt.Point).Construct(field.widths - 5.5,field.r2 + 5.5)
+		
+		
 		
 		return field
 		
@@ -88,6 +127,54 @@ Storage Default
 </Value>
 <Value name="12">
 <Value>segLenY</Value>
+</Value>
+<Value name="13">
+<Value>l0</Value>
+</Value>
+<Value name="14">
+<Value>l1</Value>
+</Value>
+<Value name="15">
+<Value>l2</Value>
+</Value>
+<Value name="16">
+<Value>l3</Value>
+</Value>
+<Value name="17">
+<Value>r0</Value>
+</Value>
+<Value name="18">
+<Value>r1</Value>
+</Value>
+<Value name="19">
+<Value>r2</Value>
+</Value>
+<Value name="20">
+<Value>r3</Value>
+</Value>
+<Value name="21">
+<Value>l5</Value>
+</Value>
+<Value name="22">
+<Value>l4</Value>
+</Value>
+<Value name="23">
+<Value>lgt</Value>
+</Value>
+<Value name="24">
+<Value>lgb</Value>
+</Value>
+<Value name="25">
+<Value>r4</Value>
+</Value>
+<Value name="26">
+<Value>r5</Value>
+</Value>
+<Value name="27">
+<Value>rgb</Value>
+</Value>
+<Value name="28">
+<Value>rgt</Value>
 </Value>
 </Data>
 <DataLocation>^fbt.FieldD</DataLocation>
