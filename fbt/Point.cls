@@ -4,8 +4,6 @@ Property lat As %Decimal(SCALE = 8) [Required ];
 Property lon As %Decimal(SCALE = 8) [Required ];
 
 
-
-
 Storage Default
 {
 <Data name="PointDefaultData">
