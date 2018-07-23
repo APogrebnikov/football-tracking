@@ -11,6 +11,8 @@ Class fbt.Pass Extends %Persistent
 	Property startTime As %Time [Required ];
 	Property duration As %Integer [Required ];
 	Property speed As %Decimal [Required ];
+	Property Scored As %Boolean;
+	Property inField As %Boolean;
 	
 Storage Default
 {
@@ -62,6 +64,12 @@ Storage Default
 </Value>
 <Value name="16">
 <Value>match</Value>
+</Value>
+<Value name="17">
+<Value>Scored</Value>
+</Value>
+<Value name="18">
+<Value>inField</Value>
 </Value>
 </Data>
 <DataLocation>^fbt.PassD</DataLocation>

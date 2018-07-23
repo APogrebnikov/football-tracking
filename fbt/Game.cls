@@ -8,6 +8,7 @@ Class fbt.Game Extends %Persistent
 	/// Teams playing
 	Property guestTeam As fbt.Team [Required ];
 	Property hostTeam As fbt.Team [Required ];
+	//Property Score As %String;                                       ###################
 Storage Default
 {
 <Data name="GameDefaultData">

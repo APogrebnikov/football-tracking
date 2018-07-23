@@ -1,15 +1,79 @@
 <html>
-    <head>
-        <script src="/js/d3/d3.min.js"></script>
-        <script src="/js/main.js"></script>
-        <link rel="stylesheet" href="css/index.css"/>
-    </head>
-    <body>
-        <button onclick="init()">Инициализация</button>
-        <button onclick="populate(10)">Создать круги</button>
-        <button onclick="generate()">Создать из модели</button>
-        <button onclick="moveByPoint()">Двигать</button>
+
+<head>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+
+    <script src="/js/d3/d3.min.js"></script>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+
+<script lang="javascript">
+    $(document).ready(function() {
+        init();
+        generateField(1200,900);
         
-        <div id="canvas"></div>
-    </body>
+        $('input').on('propertychange input', function (e) {
+            var valueChanged = false;
+
+            if (e.type=='propertychange') {
+                valueChanged = e.originalEvent.propertyName=='value';
+            } else {
+                valueChanged = true;
+            }
+            if (valueChanged) {
+                createCircleForCheck();
+            }
+        });
+    });
+</script>
+
+<body>
+    <div class="row">
+        <div class="col-9">
+            <div id="canvas"></div>
+        </div>
+
+        <div class="col-3">
+            <div class="btn-group-vertical">
+                <button type="button" class="btn btn-success" onclick="generateField(1200,900)">Сгенерировать поле</button>
+                <button type="button" class="btn btn-success" onclick="moveByRandomPoint()">Двигать Рандомно</button>
+
+                <button type="button" class="btn btn-success" onclick="generate()">Создать из модели</button>
+                <button type="button" class="btn btn-success" onclick="moveByPoint()">Двигать</button>
+
+                <button type="button" class="btn btn-success" onclick="populate(10)">Создать круги</button>
+                
+                <br/>
+                
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addonX">X</span>
+                    </div>
+                    <input id="tbX" type="number" class="form-control" placeholder="0" aria-label="X" aria-describedby="basic-addonX" value="600">
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addonY">Y</span>
+                    </div>
+                    <input id="tbY" type="number" class="form-control" placeholder="0" aria-label="Y" aria-describedby="basic-addonY" value="450">
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addonR">Радиус</span>
+                    </div>
+                    <input id="tbR" type="number" class="form-control" placeholder="0" aria-label="R" aria-describedby="basic-addonR" value="20">
+                </div>
+                
+                <button type="button" class="btn btn-success" onclick="createCircleForCheck()">Создать круг</button>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>
