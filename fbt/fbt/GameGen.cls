@@ -1,19 +1,99 @@
 Class fbt.GameGen Extends %Persistent
 {
-	Property fieled As fbt.Field;
+	Property field As fbt.Field;
 	/// The method generates the game
 	Method stepGen(rad As %Decimal = 50, pass As fbt.Pass) {
+		s curPass = ##class(fbt.Pass).%New()
 		//get start point
 		//get player from
 		if (pass.inField){
-			s start = end  
-			s fromPl = toPl
+			s curPass.vecStart = pass.vecEnd  
+			s curPass.fromPlayer = pass.toPlayer
 		} else {
-			s start = end  
-			s fromPl = toPl
+			w "be be be"
+			//s start = end  
+			//s fromPl = toPl
 		}
 		//get end point [rand]
-			s end = vecGen(rad, ..fieled, pass) 
+			s end = vecGen(rad, ..field, pass)
+			//check interseption
+			if ((end.lat < 0 || end.lat >= field.len)&&(end.lon < 0 || end.lon >= ..field.widths)){
+				s pass.inField = 0
+				if end.lon < 0{
+					if end.lat < 0 {
+						s p1 = ..interCheck(start,end,..field.l0,..field.r0)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l1,..field.l2)
+						if p1.lat > -1 {
+							s pass.Scored = 1
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l0,..field.l1)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l2,..field.l3)
+						if p1.lat > -1 {
+						
+						}
+					} else {
+						s p1 = ..interCheck(start,end,..field.l3,..field.r3)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l1,..field.l2)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l0,..field.l1)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l2,..field.l3)
+						if p1.lat > -1 {
+						
+						}
+					}
+				} else {
+					if end.lat < 0 {
+						s p1 = ..interCheck(start,end,..field.l0,..field.r0)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l1,..field.l2)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l0,..field.l1)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l2,..field.l3)
+						if p1.lat > -1 {
+						
+						}
+					} else {
+						s p1 = ..interCheck(start,end,..field.l3,..field.r3)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l1,..field.l2)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l0,..field.l1)
+						if p1.lat > -1 {
+						
+						}
+						s p1 = ..interCheck(start,end,..field.l2,..field.l3)
+						if p1.lat > -1 {
+						
+						}
+					}
+				}
+			}
 		//get player to
 		
 		//get speed [rand]
@@ -95,6 +175,9 @@ Storage Default
 </Value>
 <Value name="2">
 <Value>fieled</Value>
+</Value>
+<Value name="3">
+<Value>field</Value>
 </Value>
 </Data>
 <DataLocation>^fbt.GameGenD</DataLocation>
