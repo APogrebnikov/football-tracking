@@ -459,6 +459,35 @@ function generateRandomPoints(){
     return result;
 }
 
+function createCircleForCheck(){
+    svg.selectAll("#selCircle").remove();
+    
+    var x = $('#tbX').val();
+    var y = $('#tbY').val();
+    var r = $('#tbR').val();
+    
+    var circle=svg.append('circle') 
+        .attr('id', 'selCircle')
+        .attr('cx', x)
+        .attr('cy', y)
+        .attr('r', r)
+        .style('opacity', .2) 
+        .attr('fill','red');
+}
+
+$('input').on('propertychange input', function (e) {
+    var valueChanged = false;
+
+    if (e.type=='propertychange') {
+        valueChanged = e.originalEvent.propertyName=='value';
+    } else {
+        valueChanged = true;
+    }
+    if (valueChanged) {
+        createCircleForCheck();
+    }
+});
+
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
