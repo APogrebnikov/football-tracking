@@ -45,7 +45,35 @@ ClassMethod getAllGames(){
 /// ѕолучение всех векторов дл€ игры
 ClassMethod getAllPoints(idgame As %String){
 	set st=$$$OK
-	q st
+	try{
+		set sql = "SELECT * FROM fbt.Pass WHERE match="_idgame	
+   	 	set rs = ##class(%ResultSet).%New("%DynamicQuery:SQL")
+   		$$$ThrowOnError(rs.Prepare(sql))
+	    $$$ThrowOnError(rs.Execute())
+	    #dim out As %DynamicArray = []
+	    while (rs.%Next() '= 0) {
+			#dim pass As fbt.Pass = rs.GetObject()
+			set r =  {
+			    "id": (pass.%Id()),
+			    "startX":(pass.vecStart.lat),
+			    "startY":(pass.vecStart.lon),
+			    "endX":(pass.vecEnd.lat),
+			    "endY":(pass.vecEnd.lon),
+			    "speed":(pass.speed),
+			    "startTime":(pass.startTime),
+			    "duration":(pass.duration),
+			    "fromPlayer":(pass.fromPlayer.name),
+			    "toPlayer":(pass.toPlayer.name)
+			}
+	 		do out.%Push(r)
+	    }
+		
+	    w out.%ToJSON()
+	    
+	}catch c{
+		set st = c.AsStatus()
+	}
+    return st
 }
 
 /// ѕроверка дл€ круга - должен возвращать список векторов, с которыми было пересечение
@@ -57,6 +85,8 @@ ClassMethod checkRound(idgame As %String){
     set cx=obj.cx
     set cy=obj.cy
     set r=obj.r
+    
+    //TODO: ¬ызвать метод возвращающий список пассов
     
     q $$$OK
 }

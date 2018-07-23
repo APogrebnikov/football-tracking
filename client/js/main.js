@@ -7,6 +7,8 @@ var height = 2000;
 var widthField;
 var heightField;
 
+var restServer='http://localhost:57773/rest/football/';
+
 var listOfCircles=[];
 var listOfPoints=[
     {
@@ -497,4 +499,34 @@ function getRandomColor() {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
+}
+
+//REST API
+function loadAllGames(){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', restServer+'get/games', false);
+    xhr.send();
+
+    if (xhr.status != 200) {
+      alert( xhr.status + ': ' + xhr.statusText );
+    } else {
+        console.log(xhr.responseText);
+        pushTable(JSON.parse(xhr.responseText));
+    }
+}
+
+function pushTable(list){
+    var table=$('#tbGames');
+    for(var i=0;i<list.length;i++)
+    {
+        var tr=$('<tr></tr>');
+        var tdId=$('<td>'+list[i].matchId+'</td>');
+        var tdTeam1=$('<td>'+list[i].hostTeam+'</td>');
+        var tdTeam2=$('<td>'+list[i].guestTeam+'</td>');
+        
+        tr.append(tdId);
+        tr.append(tdTeam1);
+        tr.append(tdTeam2);
+        table.append(tr);
+    }
 }

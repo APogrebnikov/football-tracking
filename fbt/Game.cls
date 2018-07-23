@@ -1,14 +1,20 @@
-Class fbt.Game Extends %Persistent
+Class fbt.Game Extends (%Persistent, %Populate)
 {
-	Relationship passes as fbt.Pass [Cardinality = many, Inverse = match];
-	Property matchId As %String [Required ];
+	Property matchId As %String [Required];
+	
 	/// Time from start in sec
-	Property duration As %Integer [Required ];
-	Property startTime As %Time [Required ];
+	Property duration As %Integer [Required]
+	;
+	Property startTime As %Time [Required];
+	
 	/// Teams playing
-	Property guestTeam As fbt.Team [Required ];
-	Property hostTeam As fbt.Team [Required ];
-	//Property Score As %String;                                       ###################
+	Property guestTeam As fbt.Team [Required];
+	
+	Property hostTeam As fbt.Team [Required];
+	
+	Relationship passes as fbt.Pass [Cardinality = many, Inverse = match];
+	
+	//Property Score As %String; 
 Storage Default
 {
 <Data name="GameDefaultData">
