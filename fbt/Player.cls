@@ -5,7 +5,7 @@ Relationship Team As fbt.Team [ Cardinality = one, Inverse = Players ];
 
 Property name As %String(MAXLEN = "");
 
-Property role As fbt.Role(POPSPEC = ".PopRole()");
+Property role As fbt.Role (POPSPEC = ".PopRole()");
 
 // ..
 

@@ -5,7 +5,7 @@ Class fbt.Pass Extends %Persistent
 	Property vecStart As fbt.Point [Required ];
 	Property vecEnd As fbt.Point [Required ];
 	/// happend between players
-	Property fromPlayer As fbt.Player [Required ];
+	Property fromPlayer As fbt.Player; // [Required ];
 	Property toPlayer As fbt.Player;
 	/// Timing
 	Property startTime As %Integer [Required ];
@@ -21,10 +21,10 @@ Class fbt.Pass Extends %Persistent
 	{
 		s vec = ##class(fbt.Point).vecDif(..vecEnd,..vecStart)
 		s vecLen = ##class(fbt.GameGen).vecLen(vec.lat,vec.lon)
-		s speed = $R(40)
+		s speed = $R(45) + 5
 		s ..speed = speed
 		// calc time
-		s ..duration = vecLen / speed + 1
+		s ..duration = vecLen / (speed) + 1
 	}
 	
 Storage Default

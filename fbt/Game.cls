@@ -10,17 +10,26 @@ Class fbt.Game Extends (%Persistent, %Populate)
 	Property hostTeam As fbt.Team [Required ];
 	//Property Score As %String;                                       ###################
 	
-	/// get all passes near the point ___________Not Done______________
+	/// get all passes near the point                              ___________Not Done______________###############
 	Method allPasses(point As fbt.Point, rad As %Decimal) 
 	{
-		//get vectors
-		//
+		//get vectors                     								######################3
+		s passList = ##class(%ListOfObject).%New()
+		s retPassList = ##class(%ListOfObject).%New()
+		s lenList = passList.Count()
+		for i = 1:1:lenList{
+			s cPass = passList.GetAt(i)
+			if ..circleIntersepts(point,rad,cPass.vecStart,cPass.vecEnd){
+				d retPassList.Insert(cPass)
+			}
+		}
+		
 	}
 	
 	/// check interseptions
-	ClassMethod circleIntersepts(point As fbt.Point, rad As %Decimal, vs As fbt.Point, ve As fbt.Point) As %Bolean 
+	ClassMethod circleIntersepts(point As fbt.Point, rad As %Decimal, vs As fbt.Point, ve As fbt.Point) As %Boolean
 	{
-		#dim isInter As %Bolean
+		#dim isInter As %Boolean
 		s isInter = 0
 		if ..inCirc(point,rad,vs){
 			s isInter = 1
@@ -42,7 +51,7 @@ Class fbt.Game Extends (%Persistent, %Populate)
 		s a = (x12**2) + (y12 ** 2)
 		s b = 2 * ((x12 * x2) - (x12 * x3) + (y12 * y2) - (y12 * y3))
 		s c = (x2**2) + (x3**2) + (y2**2) + (y3**2) - (rad**2) - (2 * x2 * x3) - (2 * y2 * y3)
-		s D = (b**2) - (4 * a * c)
+		s D = (b**2) - ((4 * a) * c)
 		if D>= 0{
 			s t1 = (0 - b) + (D**0.5) / (2*a)
 			s t2 = (0 - b) - (D**0.5) / (2*a)
@@ -57,7 +66,7 @@ Class fbt.Game Extends (%Persistent, %Populate)
 		}
 		return isInter
 	}
-	ClassMethod inCirc(point As fbt.Point, rad As %Decimal, vp As fbt.Point) As %Bolean
+	ClassMethod inCirc(point As fbt.Point, rad As %Decimal, vp As fbt.Point) As %Boolean
 	{
 		return (rad**2) >= (((vp.lat - point.lat)**2) + ((vp.lon - point.lon)**2))  
 	}

@@ -52,6 +52,8 @@ Class fbt.Field Extends %Persistent
 		s field.startPoint = startPoint
 		s field.len = len
 		s field.widths = widths
+		s field.segLenX = widths / 10
+		s field.segLenX = len / 10
 		
 		s field.degOfLat = 111319 * ($zcos(field.startPoint.lat * $zpi / 180)) 
 		s field.degOfLon = 111134
