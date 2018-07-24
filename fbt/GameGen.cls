@@ -3,7 +3,7 @@ Class fbt.GameGen Extends %Persistent
 	Property field As fbt.Field;
 	
 	/// The method generates the game
-	Method stepGen(rad As %Decimal = 50, pass As fbt.Pass) {
+	Method stepGen(rad As %Decimal = 50, pass As fbt.Pass) As fbt.Pass{
 		#dim curPass As fbt.Pass
 		s curPass = ##class(fbt.Pass).%New()
 		s curPass.startTime = pass.startTime + pass.duration
@@ -13,16 +13,17 @@ Class fbt.GameGen Extends %Persistent
 			s start = pass.vecEnd
 			s curPass.vecStart = pass.vecEnd  
 			s curPass.fromPlayer = pass.toPlayer
+			s end = vecGen(rad, ..field, pass)
 		} else {
 			s start = pass.vecEnd
 			s curPass.vecStart = pass.vecEnd  
 			s curPass.fromPlayer = pass.toPlayer
-			
+			s point =  $CASE(pass.sector,1: ##class(fbt.Point).Construct($R(10),$R(10) - 5),2:##class(fbt.Point).Construct(..field.widths - 10 + $R(10),$R(10)), 3: ##class(fbt.Point).Construct($R(10) - 5,..field.len - 10 + $R(10)), 4: ##class(fbt.Point).Construct($R(10) - 5,$R(10)) )
 			//s start = end  
 			//s fromPl = toPl
 		}
 		//get end point [rand]
-			s end = vecGen(rad, ..field, pass)
+			//s end = vecGen(rad, ..field, pass)
 			s curPass.vecEnd = end
 			//check interseption
 			if ((end.lat < 0 || end.lat >= field.len) || (end.lon < 0 || end.lon >= ..field.widths)){
@@ -292,8 +293,9 @@ Class fbt.GameGen Extends %Persistent
 					}
 				}
 			}
+			
 		//get player to
-		
+		s curPass.inField = 1
 		d curPass.genSpeedTime()
 		d curPass.%Save()
 		return curPass
@@ -362,10 +364,22 @@ Class fbt.GameGen Extends %Persistent
 		//GCT
 		
 		//loop
-		while(true){
+		#dim nextPass As fbt.Pass
+		s nextPass = ##class(fbt.Pass).%New()
+		s nextPass.vecStart = game.field.center
+		s nextPass.vecEnd = game.field.center
+		s nextPass.duration = 0
+		s nextPass.startTime = 0
+		s nextPass.speed = 0
+		s nextPass.inField = 1
+		//s nextPass.fromPlayer = 
+		s nextPass.toPlayer = nextPass.fromPlayer 
+		while(true) {
+			s pass = nextPass
 			s rad = $R(20) + 40
-			d game.stepGen(rad,pass)
+			s nextPass = game.stepGen(rad,pass)
 		}
+		
 		
 	}	
 

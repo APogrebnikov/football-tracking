@@ -13,7 +13,8 @@ Class fbt.Field Extends %Persistent
 	Property degOfLon As %Decimal;
 	Property segLenX As %Decimal;
 	Property segLenY As %Decimal;
-	// vector op vectors of lines
+	// vector op vectors of lines, l-left, r-right, ?0-bottom, ?3-top, ?1 and ?2 borders of gates, ?4 and ?5 - gates zone side field,
+	// ?gt and ?gb - in fielg gate zone border
 	Property l0 As fbt.Point;
 	Property l1 As fbt.Point;
 	Property l2 As fbt.Point;

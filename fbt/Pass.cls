@@ -8,12 +8,13 @@ Class fbt.Pass Extends %Persistent
 	Property fromPlayer As fbt.Player [Required ];
 	Property toPlayer As fbt.Player;
 	/// Timing
-	Property startTime As %Time [Required ];
+	Property startTime As %Integer [Required ];
 	Property duration As %Integer [Required ];
 	Property speed As %Decimal [Required ];
 	Property Scored As %Boolean;
 	Property inField As %Boolean;
-	Property sector As %Integer;//0 = Any, 1 = 1q & 2q, 2 = 2q & 3q 3 = 3q & 4q 4 = 4q & 1q
+	///0 = Any, 1 = 1q & 2q, 2 = 2q & 3q 3 = 3q & 4q 4 = 4q & 1q
+	Property sector As %Integer;
 	
 	/// speed, time generation
 	Method genSpeedTime() 

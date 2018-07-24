@@ -4,13 +4,13 @@ Class fbt.Game Extends (%Persistent, %Populate)
 	Property matchId As %String [Required ];
 	/// Time from start in sec
 	Property duration As %Integer [Required ];
-	Property startTime As %Time [Required ];
+	Property startTime As %Integer [Required ];
 	/// Teams playing
 	Property guestTeam As fbt.Team [Required ];
 	Property hostTeam As fbt.Team [Required ];
 	//Property Score As %String;                                       ###################
 	
-	/// get all passes near the point
+	/// get all passes near the point ___________Not Done______________
 	Method allPasses(point As fbt.Point, rad As %Decimal) 
 	{
 		//get vectors
@@ -22,6 +22,15 @@ Class fbt.Game Extends (%Persistent, %Populate)
 	{
 		#dim isInter As %Bolean
 		s isInter = 0
+		if ..inCirc(point,rad,vs){
+			s isInter = 1
+			return isInter
+		}
+		if ..inCirc(point,rad,ve){
+			s isInter = 1
+			return isInter
+		}
+		
 		s x1 = vs.lat
 		s x2 = ve.lat
 		s x3 = point.lat
