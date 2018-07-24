@@ -1,6 +1,6 @@
 Class fbt.CurTeam Extends (%Persistent, %Populate)
 {
-	Relationship Team as fbt.Team [Cardinality = one, Inverse = CurTeam];
+	Relationship Team as fbt.Team [Cardinality = one, Inverse = CurTeams];
 	Property Players as list of fbt.Player (POPSPEC = ".PopCTeam()");
 		
 	
