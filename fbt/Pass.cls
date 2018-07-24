@@ -27,6 +27,16 @@ Class fbt.Pass Extends %Persistent
 		// calc time
 		s ..duration = vecLen / speed + 1
 	}
+	
+	ClassMethod GetPassList(game as fbt.Game){
+		s sql = "SELECT ID FROM fbt.Pass WHERE match -> ID = ?"
+		kill sqlp
+		s sqlp($I(sqlp))= game.%Id()		
+		s rset=##class(%SQL.Statement).%ExecDirect(,sql,sqlp...)
+		s passList = ##class(%ListOfObject).%New()
+		while (rset.%Next()) { do passList.Insert(##class("fbt.Pass").%OpenId(rset.%Get("ID"))) }
+		q passList
+	}
 Storage Default
 {
 <Data name="PassDefaultData">
