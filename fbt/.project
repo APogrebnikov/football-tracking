@@ -7,11 +7,14 @@
 	<buildSpec>
 		<buildCommand>
 			<name>com.intersystems.atelier.core.validator</name>
+<<<<<<< HEAD
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
 			<name>com.intersys.eclipse.studio.validator</name>
+=======
+>>>>>>> 5ce07448ae80f9cceba5e197786acf3281bd547a
 			<arguments>
 			</arguments>
 		</buildCommand>
