@@ -6,12 +6,17 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
+			<name>com.intersystems.atelier.core.validator</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>com.intersys.eclipse.studio.validator</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>com.intersys.eclipse.studio.nature</nature>
+		<nature>com.intersystems.atelier.core.nature</nature>
 	</natures>
 </projectDescription>
