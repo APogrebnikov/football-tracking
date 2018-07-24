@@ -6,6 +6,9 @@ var width = 2000;
 var height = 2000;
 var widthField;
 var heightField;
+var currentGameId=0;
+
+var restServer='http://localhost:57773/rest/football/';
 
 var listOfCircles=[];
 var listOfPoints=[
@@ -471,22 +474,24 @@ function createCircleForCheck(){
         .attr('cx', x)
         .attr('cy', y)
         .attr('r', r)
-        .style('opacity', .2) 
+        .attr('stroke', 'white')
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '5,5')
+        .attr('fill-opacity',.2)
         .attr('fill','red');
+        //.style('opacity', .2) 
+    
+    var dragHandler = d3.drag().on("drag", function () {
+        d3.select(this).interrupt()
+            .attr("cx", d3.event.x)
+            .attr("cy", d3.event.y);
+        $('#tbX').val(d3.event.x);
+        $('#tbY').val(d3.event.y)
+    });
+
+    dragHandler(svg.selectAll("#selCircle"));
 }
 
-$('input').on('propertychange input', function (e) {
-    var valueChanged = false;
-
-    if (e.type=='propertychange') {
-        valueChanged = e.originalEvent.propertyName=='value';
-    } else {
-        valueChanged = true;
-    }
-    if (valueChanged) {
-        createCircleForCheck();
-    }
-});
 
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -495,4 +500,103 @@ function getRandomColor() {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
+}
+
+//===REST API
+//Получение списка всех игр
+function loadAllGames(){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', restServer+'get/games', false);
+    xhr.send();
+
+    if (xhr.status != 200) {
+        console.error( xhr.status + ': ' + xhr.statusText );
+    } else {
+        console.log(xhr.responseText);
+        pushGamesTable(JSON.parse(xhr.responseText));
+    }
+}
+
+function pushGamesTable(list){
+    var table=$('#tbGames');
+    for(var i=0;i<list.length;i++)
+    {
+        var tr=$('<tr></tr>');
+        var tdId=$('<td>'+list[i].matchId+'</td>');
+        var tdTeam1=$('<td>'+list[i].hostTeam+'</td>');
+        var tdTeam2=$('<td>'+list[i].guestTeam+'</td>');
+        
+        tr.on('click',function(game){
+            getPassesForGame(game.id);
+        }.bind(this,list[i]));
+        
+        tr.append(tdId);
+        tr.append(tdTeam1);
+        tr.append(tdTeam2);
+        table.append(tr);
+    }
+}
+
+//Получение списка всех пассов в игре
+function getPassesForGame(gameId){
+    currentGameId=gameId;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', restServer+'get/points/'+gameId, false);
+    xhr.send();
+
+    if (xhr.status != 200) {
+        console.error( xhr.status + ': ' + xhr.statusText );
+    } else {
+        console.log(xhr.responseText);
+        var allPasses=JSON.parse(xhr.responseText);
+        var points=[];
+        for(var i=0;i<allPasses.length;i++)
+        {
+            var point1={};
+            point1.x=allPasses[i].startX;
+            point1.y=allPasses[i].startY;
+            point1.player=allPasses[i].fromPlayer;
+            points.push(point1);
+            
+            var point2={};
+            point2.x=allPasses[i].endX;
+            point2.y=allPasses[i].endY;
+            point2.player=allPasses[i].toPlayer;
+            points.push(point2);
+        }
+    }
+}
+
+//Получение списка всех пассов пересекающих круг
+function getPassesCheck(){
+    var x = $('#tbX').val();
+    var y = $('#tbY').val();
+    var r = $('#tbR').val();
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", restServer+'check/round/'+currentGameId, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({cx:x, cy:y,r:r}));
+
+    if (xhr.status != 200) {
+        console.error( xhr.status + ': ' + xhr.statusText );
+    } else {
+        console.log(xhr.responseText);
+        var allPasses=JSON.parse(xhr.responseText);
+        var points=[];
+        for(var i=0;i<allPasses.length;i++)
+        {
+            var point1={};
+            point1.x=allPasses[i].startX;
+            point1.y=allPasses[i].startY;
+            point1.player=allPasses[i].fromPlayer;
+            points.push(point1);
+            
+            var point2={};
+            point2.x=allPasses[i].endX;
+            point2.y=allPasses[i].endY;
+            point2.player=allPasses[i].toPlayer;
+            points.push(point2);
+        }
+    }
 }

@@ -25,3 +25,13 @@ div.tooltip {
 {
 	fill: url(#ball-pattern) #cccccc;
 }
+
+#tbGames{
+    background: #fff;
+    font-size: 10px;
+    max-width: 265px;
+}
+
+#tbGames tr{
+    cursor: pointer;
+}

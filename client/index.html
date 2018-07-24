@@ -3,11 +3,12 @@
 <head>
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/js/popper.min.js"></script>
-
     <script src="/js/d3/d3.min.js"></script>
-    <script src="/js/main.js"></script>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script src="/js/bootstrap.min.js"></script>
+    
+    <script src="/js/main.js"></script>
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/index.css" />
 </head>
 
@@ -28,6 +29,8 @@
                 createCircleForCheck();
             }
         });
+        
+        loadAllGames();
     });
 </script>
 
@@ -41,11 +44,13 @@
             <div class="btn-group-vertical">
                 <button type="button" class="btn btn-success" onclick="generateField(1200,900)">Сгенерировать поле</button>
                 <button type="button" class="btn btn-success" onclick="moveByRandomPoint()">Двигать Рандомно</button>
+                <!--
 
                 <button type="button" class="btn btn-success" onclick="generate()">Создать из модели</button>
                 <button type="button" class="btn btn-success" onclick="moveByPoint()">Двигать</button>
 
                 <button type="button" class="btn btn-success" onclick="populate(10)">Создать круги</button>
+                -->
                 
                 <br/>
                 
@@ -71,6 +76,22 @@
                 </div>
                 
                 <button type="button" class="btn btn-success" onclick="createCircleForCheck()">Создать круг</button>
+                <button type="button" class="btn btn-success" onclick="getPassesCheck()">Проверить вхождения</button>
+            </div>
+            
+            <br/>
+            
+            <div>
+                <table id="tbGames" class="table table-hover">
+                    <thead>
+                        <th>ID</th>
+                        <th>Команда 1</th>
+                        <th>Команда 2</th>
+                    </thead>
+                    <tbody>
+                    
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
