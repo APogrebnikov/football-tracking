@@ -1,0 +1,76 @@
+1) «апустить генерацию ролей
+
+ClassMethod CreateRoles(){
+	s sc = ..NewRole("Goalkeeper")
+	s sc = ..NewRole("Defender")
+	s sc = ..NewRole("Midfielder")
+	s sc = ..NewRole("Forward")
+	}
+ClassMethod NewRole(name As %String) as %Status{
+	s sc = $$$OK
+	s role = ##class(fbt.Role).%New()
+	s role.roleName = name
+	s sc = role.%Save()
+	q sc
+}
+
+2) «апустить генерацию сборных/команд (fbt.Team)
+	
+	s sc = ##class(fbt.Team).Populate(4)
+	
+3) «апустить генерацию игроков дл€ команд ()	
+	s sc = ##class(fbt.Player).Populate(120)
+	
+4) «апустить генерацию игры ()
+
+	...(?)
+	
+	4.1) «апустить генерацию пол€
+	
+	
+	4.2) «апустить генерацию состава команд
+	
+	(Populate)
+	s Game.TeamHost = ##class(fbt.CurTeam).
+	s Game.TeamGuest = 
+	
+	4.3) «апустить генерацию пасов
+		while time<90
+		
+		Ќа вход: предыдущий пас
+		
+		1) выбрать наальную точку
+				out + goal : центр
+				out + бокова€ : пересечение
+				out + лини ворот : угловой
+				зона ворот : сбрасывание вратарЄм
+				: Pass.toPoint
+		
+		2) выбрать игрока 1
+				out + goal: ???????????????????????????????????????????????????????
+				out: 'Pass.Player.Team (метод выбора по зоне)
+				зона ворот: TeamLeft|Right - goalkeeper
+				: Pass.toPlayer
+				
+		3) сгенерировать конечную точку
+			(расчитать начальное врем€ паса)
+			(сгенерировать скорость)
+			(расчитать врем€ паса)
+			(расчитать длину паса)
+		4) выбрать игрока 2
+				out : -
+				зона по точке:
+				left : (1) Defender, Midfielder (2) Forward, Midfielder
+				right : (1) Forward, Midfielder (2) Defender, Midfielder
+				l_goal : (1) Goalkeeper
+				r_goal : (2) Goalkeeper
+		
+		5) создание индекса паса
+	
+	
+	
+5) ѕоиск векторов
+	
+	1) создание индекса по окружности 
+
+	2) выбор векторов по индексу
