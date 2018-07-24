@@ -52,16 +52,16 @@ Class fbt.CurTeam Extends (%Persistent, %Populate)
 		r sc
 	}
 	
-		ClassMethod PassIndex(x1 As %Decimal , y1 As %Decimal, x2 As %Decimal, y2 As %Decimal) 
+	// Методы для пасов
+	/// Вычисление индекса для паса
+	ClassMethod PassIndex(pass as fbt.Pass, field as fbt.Field) 
 	{			
+		// x1 As %Decimal , y1 As %Decimal, x2 As %Decimal, y2 As %Decimal
 		
-		
-		///////////////////
-		s x0 = 0
-		s y0 = 0
-		s lsx = 10
-		s lsy = 10
-		///////////////////
+		s x0 = field.center.lat
+		s y0 = field.center.lon
+		s lsx = field.segLenX
+		s lsy = field.segLenY
 		
 		s x1 = $Double($Piece((x1 - x0) / lsx,".",1))
 		s x2 = $Double($Piece((x2 - x0) / lsx,".",1))
@@ -76,16 +76,16 @@ Class fbt.CurTeam Extends (%Persistent, %Populate)
 		
 		q ..GetIndex(minX, maxX, minY, maxY)
 	}
-	
-	ClassMethod CircleIndex(radius, centerX,centerY) {
-		s minX = $Double($Piece((centerX - radius) / lsx,".",1))
-		s maxX = $Double($Piece((centerX + radius) / lsx,".",1))
-		s minY = $Double($Piece((centerY - radius) / lsy,".",1))
-		s minX = $Double($Piece((centerY + radius) / lsy,".",1))
+	/// Вычисление индекса для окружности
+	ClassMethod CircleIndex(radius, centerX,centerY, field as fbt.Field) {
+		s minX = $Double($Piece((centerX - radius) / field.segLenX,".",1))
+		s maxX = $Double($Piece((centerX + radius) / field.segLenX,".",1))
+		s minY = $Double($Piece((centerY - radius) / field.segLenY,".",1))
+		s minX = $Double($Piece((centerY + radius) / field.segLenY,".",1))
 			 
 		q ..GetIndex(minX, maxX, minY, maxY)
 	}
-
+	 
 	ClassMethod GetIndex(minX, maxX, minY, maxY) {
 		s index = $ZBitStr(100,0)
 		s index = $SYSTEM.Bit.ZBitToBit(index)
@@ -98,10 +98,31 @@ Class fbt.CurTeam Extends (%Persistent, %Populate)
 		q index
 	}	
 	
+	ClassMethod GetIndexMask(index) {
+		s index = ##class(fbt.Index).%New()
+		s index.part1 = ..BinToDec(1,index)
+		s index.part2 = ..BinToDec(2,index)
+		q index
+	}
+	
+	ClassMethod BinToDec(part, index){
+		s len = 50
+		s start = 1 + (len * (part-1))
+		s end = len + (len * (part-1))
+		
+		s int = 0
+		for i = start:1:end {
+			s int = int + ($Bit(index,i) * $ZPOWER(2,( i-(len*(part-1)) ) ))
+		}
+		q int
+	}
+	
+	/// Получение списка пасов, с учётом индекса
 	ClassMethod GetPassList(radius, centerX,centerY) {
 		s circleIndex = ..CircleIndex(radius, centerX,centerY)
+		
 		////////////////////////
-		s sql = "SELECT ID FROM ..."
+		s sql = "SELECT ID FROM fbt.Pass WHERE "
 		
 		kill sqlp
 		s sqlp($I(sqlp))= ""
@@ -118,6 +139,47 @@ Class fbt.CurTeam Extends (%Persistent, %Populate)
 		
 	
 	}
+
+	/// Получение случайного игрока
+	ClassMethod GetPlayer(pass as fbt.Pass){
+		s gId = pass.match.%Id()
+		s game = ##class("fbt.Game").%OpenId(gId)
+		
+		//s list = ##class(%ListOfObjects).%New()
+		//s list = game.guestTeam 
+		
+		if (pass.inField = 0) { 
+			s rand = $R(2)
+			s team = $Case(rand, 0:game.guestTeam.Players,:game.hostTeam.Players)
+		}
+		else {
+			if (pass.fromPlayer.Team.%Id() = game.hostTeam.Team.%Id()) { s team = game.guestTeam.Players }
+			else { s team = game.hostTeam.Players } 
+		}
+		// случайный игрок случайной команды
+		// TODO(!) телепортaция -> учёт зон
+		s rand = $R(team.Count())
+		s player = team.GetAt(rand+1)
+		
+		q player 		
+	}
+	
+	/// Получение сектора мяча
+	ClassMethod GetSector(field as fbt.Field, pass)
+	{	
+		s z = $Case(1,	((x > field.center.lat) && ((y > field.r4.lon)||(y > field.r5.lon))):"right_0", // в зоне ворот
+						(x > field.center.lat):"right_1",
+						((x <= field.center.lat) && ((y > field.l4.lon)||(y > field.l5.lon))):"left_0", // в зоне ворот 
+						(x <= Field.center.lat):"left_1",
+						:"center")
+		// left - host
+		// right - guest
+		
+		
+	}
+	
+	
+	
 Storage Default
 {
 <Data name="CurTeamDefaultData">

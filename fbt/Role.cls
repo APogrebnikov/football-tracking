@@ -4,6 +4,20 @@ Class fbt.Role Extends %Persistent
 	Property roleName as %String;
 	Index IRoleName on roleName [unique];
 	
+// Создание справочника ролей	
+ClassMethod CreateRoles(){
+	s sc = ..NewRole("Goalkeeper")
+	s sc = ..NewRole("Defender")
+	s sc = ..NewRole("Midfielder")
+	s sc = ..NewRole("Forward")
+}
+ClassMethod NewRole(name As %String) as %Status{
+	s sc = $$$OK
+	s role = ##class(fbt.Role).%New()
+	s role.roleName = name
+	s sc = role.%Save()
+	q sc
+}
 Storage Default
 {
 <Data name="RoleDefaultData">

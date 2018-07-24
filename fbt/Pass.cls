@@ -14,6 +14,9 @@ Class fbt.Pass Extends %Persistent
 	Property Scored As %Boolean;
 	Property inField As %Boolean;
 	
+	// Индекс для оптимизации перебора пасов, попадающих в окружность
+	Property index As fbt.Index;
+	
 Storage Default
 {
 <Data name="PassDefaultData">
@@ -70,6 +73,9 @@ Storage Default
 </Value>
 <Value name="18">
 <Value>inField</Value>
+</Value>
+<Value name="19">
+<Value>index</Value>
 </Value>
 </Data>
 <DataLocation>^fbt.PassD</DataLocation>
