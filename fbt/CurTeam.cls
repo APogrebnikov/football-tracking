@@ -1,20 +1,24 @@
 Class fbt.CurTeam Extends (%Persistent, %Populate)
 {
 	Relationship Team as fbt.Team [Cardinality = one, Inverse = CurTeams];
-	Property Players as list of fbt.Player (POPSPEC = ".PopCTeam()");
+	Property Players as list of fbt.Player;
 		
-	
-	Method PopCTeam()
+	// (POPSPEC = ".PopCTeam()")
+	ClassMethod PopCTeam(team as fbt.Team )
 	{
 		s sc = $$$OK
-		
+		s curTeam =  ##class(fbt.CurTeam).%New()
+		s curTeam.Team = team
 		s teamList = ##class(%ListOfObjects).%New()
-		s sc = ..SetPlayers(1,"Goalkeeper", ..Team,teamList)
-		s sc = ..SetPlayers(5,"Defender", ..Team,teamList)
-		s sc = ..SetPlayers(3,"Midfielder", ..Team,teamList)
-		s sc = ..SetPlayers(2,"Forward", ..Team,teamList)
+		s sc = ..SetPlayers(1,"Goalkeeper", team.%Id(), .teamList)
+		w "next"
+		s sc = ..SetPlayers(5,"Defender", team.%Id(), .teamList)
+		s sc = ..SetPlayers(3,"Midfielder", team.%Id(), .teamList)
+		s sc = ..SetPlayers(2,"Forward", team.%Id(), .teamList)
 		
-		r teamList
+		s curTeam.Players = teamList
+		s sc = curTeam.%Save()
+		q curTeam.%Id()
 	}
 	
 	ClassMethod SetPlayers(
@@ -24,32 +28,35 @@ Class fbt.CurTeam Extends (%Persistent, %Populate)
 		Output teamList as %ListOfObjects
 	) As %Status {
 		s sc = $$$OK
-		q:($IsObject(##class(fbt.Role).IRoleNameOpen(role)))
+		q:('$IsObject(##class(fbt.Role).IRoleNameOpen(role))) $$$ERROR($$$GeneralError,"роль не найдена")
 		// поиск доступных для выбора игроков
-		s sql = "SELECT ID FROM fbt.Player WHERE Team = ? AND Role -> Name = ?" 
-		
+		s sql = "SELECT ID FROM fbt.Player WHERE (Team -> ID = ?) AND (""role""->roleName = ?)" 
 		kill sqlp
 		s sqlp($I(sqlp))= team
 		s sqlp($I(sqlp))= role
-		s rset=##class(%SQL.Statement).%ExecDirect(,sql,sqlp...)
-		
+		s statement = ##class(%SQL.Statement).%New()
+		s sc = statement.%Prepare(sql)
+		s rset=statement.%Execute(sqlp...)
 		// q:стаус (?)
-		s pCount = rset.%ROWCOUNT
-		q:(pCount<count) "В сборной недостаточно игроков с ролью "_role_" для составления команды на игру."
-		
-		s playersList = ##class(%ListOfObject).%New()
-		
+		s pCount = 0	
+		s playersList = ##class(%ListOfObjects).%New()
 		while (rset.%Next())
 		{
 			do playersList.Insert(##class("fbt.Player").%OpenId(rset.%Get("ID")))
+			s pCount = pCount +1
 		}
+		q:(pCount < count) $$$ERROR($$$GeneralError,"В сборной недостаточно игроков с ролью "_role_" для составления команды на игру.")
 		for i = 1:1:count {
-			s rand = $R(pCount)+1
+			s rand = 0
+			do {
+				s rand = $R(pCount) +1
+			} while ('$IsObject(playersList.GetAt(rand)))
 			s sc = teamList.Insert(playersList.GetAt(rand))
 			s sc = playersList.RemoveAt(rand)
+	
 		}
 	
-		r sc
+		q sc
 	}
 	
 	// Методы для пасов
@@ -97,26 +104,6 @@ Class fbt.CurTeam Extends (%Persistent, %Populate)
 		}
 		q index
 	}	
-	
-	ClassMethod GetIndexMask(index) {
-		s index = ##class(fbt.Index).%New()
-		s index.part1 = ..BinToDec(1,index)
-		s index.part2 = ..BinToDec(2,index)
-		q index
-	}
-	
-	ClassMethod BinToDec(part, index){
-		s len = 50
-		s start = 1 + (len * (part-1))
-		s end = len + (len * (part-1))
-		
-		s int = 0
-		for i = start:1:end {
-			s int = int + ($Bit(index,i) * $ZPOWER(2,( i-(len*(part-1)) ) ))
-		}
-		q int
-	}
-	
 	/// Получение списка пасов, с учётом индекса
 	ClassMethod GetPassList(radius, centerX,centerY) {
 		s circleIndex = ..CircleIndex(radius, centerX,centerY)
@@ -139,30 +126,28 @@ Class fbt.CurTeam Extends (%Persistent, %Populate)
 		
 	
 	}
-
-	/// Получение случайного игрока
-	ClassMethod GetPlayer(pass as fbt.Pass){
-		s gId = pass.match.%Id()
-		s game = ##class("fbt.Game").%OpenId(gId)
-		
-		//s list = ##class(%ListOfObjects).%New()
-		//s list = game.guestTeam 
-		
-		if (pass.inField = 0) { 
-			s rand = $R(2)
-			s team = $Case(rand, 0:game.guestTeam.Players,:game.hostTeam.Players)
-		}
-		else {
-			if (pass.fromPlayer.Team.%Id() = game.hostTeam.Team.%Id()) { s team = game.guestTeam.Players }
-			else { s team = game.hostTeam.Players } 
-		}
-		// случайный игрок случайной команды
-		// TODO(!) телепортaция -> учёт зон
-		s rand = $R(team.Count())
-		s player = team.GetAt(rand+1)
-		
-		q player 		
+	ClassMethod GetIndexMask(index) {
+		s index = ##class(fbt.Index).%New()
+		s index.part1 = ..BinToDec(1,index)
+		s index.part2 = ..BinToDec(2,index)
+		q index
 	}
+	
+	ClassMethod BinToDec(part, index){
+		s len = 50
+		s start = 1 + (len * (part-1))
+		s end = len + (len * (part-1))
+		
+		s int = 0
+		for i = start:1:end {
+			s int = int + ($Bit(index,i) * $ZPOWER(2,( i-(len*(part-1)) ) ))
+		}
+		q int
+	}
+	
+	
+
+	
 	
 	/// Получение сектора мяча
 	ClassMethod GetSector(field as fbt.Field, pass)

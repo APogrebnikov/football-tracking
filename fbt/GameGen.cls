@@ -30,14 +30,9 @@ Class fbt.GameGen Extends %Persistent
 			//zw "next"
 			if (((start.lat < 0) || (start.lat >= ..field.len)) || ((start.lon < 0) || (start.lon >= ..field.widths))){
 				s curPass.inField = 0
-				//___________________________________________
-				if (curPass.fromPlayer = 1) {
-					s rn = 2 
-				} else {
-					s rn = 1
-				}
-				s curPass.toPlayer = ##class(fbt.Player).%OpenId(rn)
-				//____________________________________-
+				//____________________________________
+				//s curPass.toPlayer = ..GetPlayer(curPass)
+				//____________________________________
 				#dim imagePass As fbt.Pass
 				s imagePass = ##class(fbt.Pass).%New()
 				d curPass.genSpeedTime()
@@ -57,12 +52,7 @@ Class fbt.GameGen Extends %Persistent
 			if ((((end.lat < 0) || (end.lat >= ..field.widths)) || (end.lon < 0)) || (end.lon >= ..field.len)) {
 				s curPass.inField = 0
 				//___________________________________________
-				if (curPass.fromPlayer = 1) {
-					s rn = 2 
-				} else {
-					s rn = 1
-				}
-				s curPass.toPlayer = ##class(fbt.Player).%OpenId(rn)
+				s curPass.toPlayer = ..GetPlayer(curPass)
 				//____________________________________-
 				#dim imagePass As fbt.Pass
 				s imagePass = ##class(fbt.Pass).%New()
@@ -398,8 +388,7 @@ Class fbt.GameGen Extends %Persistent
 					}
 				}
 			} else{
-				s rn = $R(2) + 1
-				s curPass.toPlayer = ##class(fbt.Player).%OpenId(rn)
+				s curPass.toPlayer = ..GetPlayer(curPass)
 				//________________________________________________________
 				s curPass.inField = 1
 				d curPass.genSpeedTime()
@@ -470,11 +459,15 @@ Class fbt.GameGen Extends %Persistent
 	{	
 		#dim game As fbt.GameGen
 		s game = ##class(fbt.GameGen).%New()
-		s game1 = ##class(fbt.Game).%New()
+		s curGame = ##class(fbt.Game).%New()
 		//step 1 GF
 		s game.field = ##class(fbt.Field).calcFeeld(startPoint,len,widths)
-		d ##class(fbt.Game).Populate(1,,,.curGame)
+		d ##class(fbt.Game).Populate(1,,, .curGame)
+		zw curGame(1)
 		//GCT
+		//d ##class(fbt.CurTeam).Populate(curGame.guestTeam)
+		//d ##class(fbt.CurTeam).Populate(curGame.hostTeam)
+			
 		
 		//loop
 		#dim nextPass As fbt.Pass
@@ -488,16 +481,41 @@ Class fbt.GameGen Extends %Persistent
 		s nextPass.fromPlayer = ##class(fbt.Player).%OpenId(1) // #############################################
 		s nextPass.toPlayer = nextPass.fromPlayer 
 		s i = 0
-		while(i < 100) {
+		while(i < 10000) {
 			s i = i + 1
 			s pass = nextPass
 			s pass.match = curGame
 			s rad = $R(20) + 5
 			s nextPass = game.stepGen(rad,pass,curGame)
 		}
+		s curGame.field = game.field
+		d curGame.%Save()
 		d game.%Save()
-		d game1.%Save()
-	}	
+	}
+	
+	/// Получение случайного игрока
+	ClassMethod GetPlayer(pass as fbt.Pass){
+		s gId = pass.match.%Id()
+		s game = ##class("fbt.Game").%OpenId(gId)
+		
+		//s list = ##class(%ListOfObjects).%New()
+		//s list = game.guestTeam 
+		
+		if (pass.inField = 1) { 
+			s rand = $R(2)
+			s team = $Case(rand, 0:game.guestTeam.Players,:game.hostTeam.Players)
+		}
+		else {
+			if (pass.fromPlayer.Team.%Id() = game.hostTeam.Team.%Id()) { s team = game.guestTeam.Players }
+			else { s team = game.hostTeam.Players } 
+		}
+		// случайный игрок случайной команды
+		// TODO(!) телепортaция -> учёт зон
+		s rand = $R(team.Count())
+		s player = team.GetAt(rand+1)
+		
+		q player 		
+	}
 
 Storage Default
 {

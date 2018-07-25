@@ -6,15 +6,16 @@ Class fbt.Game Extends (%Persistent, %Populate)
 	Property duration As %Integer [Required ];
 	Property startTime As %Integer [Required ];
 	/// Teams playing
-	Property guestTeam As fbt.Team [Required ];
-	Property hostTeam As fbt.Team [Required ];
+	Property guestTeam As fbt.CurTeam [Required ];
+	Property hostTeam As fbt.CurTeam [Required ];
 	//Property Score As %String;                                       ###################
-	
+	Property field As fbt.Field;
 	/// get all passes near the point                              ___________Not Done______________###############
-	Method allPasses(point As fbt.Point, rad As %Decimal) 
+	Method allPasses(point As fbt.Point, rad As %Decimal, game As fbt.Game) 
 	{
 		//get vectors                     								######################3
 		s passList = ##class(%ListOfObject).%New()
+		s passList = ##class(fbt.Pass).GetPassList(game)
 		s retPassList = ##class(%ListOfObject).%New()
 		s lenList = passList.Count()
 		for i = 1:1:lenList{
@@ -26,7 +27,7 @@ Class fbt.Game Extends (%Persistent, %Populate)
 		
 	}
 	
-	/// check interseptions
+	/// check interseptions 
 	ClassMethod circleIntersepts(point As fbt.Point, rad As %Decimal, vs As fbt.Point, ve As fbt.Point) As %Boolean
 	{
 		#dim isInter As %Boolean
@@ -66,10 +67,15 @@ Class fbt.Game Extends (%Persistent, %Populate)
 		}
 		return isInter
 	}
+	/// проверка точки на пренадлежность кругу
 	ClassMethod inCirc(point As fbt.Point, rad As %Decimal, vp As fbt.Point) As %Boolean
 	{
 		return (rad**2) >= (((vp.lat - point.lat)**2) + ((vp.lon - point.lon)**2))  
 	}
+	
+	
+	
+	
 Storage Default
 {
 <Data name="GameDefaultData">
@@ -90,6 +96,9 @@ Storage Default
 </Value>
 <Value name="6">
 <Value>hostTeam</Value>
+</Value>
+<Value name="7">
+<Value>field</Value>
 </Value>
 </Data>
 <DataLocation>^fbt.GameD</DataLocation>

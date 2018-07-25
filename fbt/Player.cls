@@ -12,13 +12,19 @@ Property role As fbt.Role (POPSPEC = ".PopRole()");
 ClassMethod Compare(number As %Integer, min As %Integer, max As %Integer) As %Boolean
 {
  	q:((number >= min) && (number <= max)) 1
- 	q:0
+ 	q 0
 }
 
-ClassMethod PopRole() As fbt.Role
+Method PopRole() As fbt.Role
 {
   	s rand = $R(1100)
-  	q role = $CASE(1,..Compare(rand,0,99):##class(fbt.Role).%IRoleNameOpen("Goalkeeper"),..Compare(rand,100,599):##class(fbt.Role).%IRoleNameOpen("Defender"),..Compare(rand,600,799):##class(fbt.Role).%IRoleNameOpen("Midfielder"),:##class(fbt.Role).%IRoleNameOpen("Forward"))
+  	w rand
+  	s role = ##class(fbt.Role).IRoleNameOpen($CASE(1, ..Compare(rand,0,99) : "Goalkeeper",
+  	 ..Compare(rand,100,599) :"Defender", 
+  	 ..Compare(rand,600,799) :"Midfielder", 
+  	 :"Forward"))
+  	 zw role
+  	q role.%Id()
 }
 
 Storage Default
