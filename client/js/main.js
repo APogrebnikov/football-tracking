@@ -442,8 +442,8 @@ function generateRandomPath(){
     var newRandomPointList=generateRandomPoints();
     
     var pathNew=svg.append("path").attr("d", line(newRandomPointList))
-        .attr("stroke", "blue")
-        .attr("stroke-width", 0)
+        .attr("stroke", "white")
+        .attr("stroke-width", 1)
         .attr("fill", "none");
     
     return pathNew;
